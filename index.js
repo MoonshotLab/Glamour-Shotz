@@ -5,6 +5,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var camera = require('./lib/camera');
+var phidget = require('./lib/phidget');
 
 
 
@@ -38,9 +39,24 @@ camera.events.on('done-recording', function(){
 
 
 
+// events from interface
 io.on('connection', function(socket) {
   // listen for countdown completion from the client before recording start
   socket.on('countdown-done', function(){
     camera.takeVideo();
   });
+});
+
+
+
+
+// phidget button events
+var desiredOutput;
+var isCapturing = false;
+phidget.events.on('capture', function(type){
+  if(!isCapturing){
+    io.emit('button-pressed', { type : type });
+    isCapturing = true;
+    desiredOutput = type;
+  }
 });
