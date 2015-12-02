@@ -7,6 +7,7 @@ var io = require('socket.io')(server);
 var camera = require('./lib/camera');
 var phidget = require('./lib/phidget');
 var video = require('./lib/video');
+var s3 = require('./lib/s3');
 
 // handle app state
 var filters       = [];
@@ -81,6 +82,13 @@ video.events.on('done', function(data){
   data.status   = 'done';
   data.location = path.normalize(data.directory.replace(process.cwd(), ''));
   io.sockets.emit('video', data);
+
+  s3.remember([
+    path.join(data.directory, 'poster.jpg'),
+    path.join(data.directory, data.file)
+  ]).then(function(remotePaths){
+    console.log(remotePaths);
+  });
 });
 
 
