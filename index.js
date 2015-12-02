@@ -6,7 +6,10 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var camera = require('./lib/camera');
 var phidget = require('./lib/phidget');
-var inActiveMode = false;
+
+// handle app state
+var filters       = [];
+var inActiveMode  = false;
 
 
 
@@ -31,10 +34,15 @@ camera.events.on('recording', function(){
 camera.events.on('done-recording', function(){
   var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
   fs.mkdirSync(outputDir);
-  camera.writeLastVideoToDisk(outputDir, function(filePath){
-    inActiveMode = false;
-    io.sockets.emit('camera', { status : 'ready' });
-  });
+
+  // necessary to give the camera enough time to "stop recording"
+  setTimeout(function(){
+    camera.writeLastVideoToDisk(outputDir, function(filePath){
+      inActiveMode  = false;
+      filters       = [];
+      io.sockets.emit('camera', { status : 'ready' });
+    });
+  }, 2500);
 
   io.sockets.emit('camera', { status : 'done-recording' });
 });
@@ -53,7 +61,12 @@ io.on('connection', function(socket) {
 
 // phidget button events
 phidget.events.on('activate', function(type){
-  io.sockets.emit('phidget', { status : 'activate', type : type });
+  // add or delete filters
+  var index = filters.indexOf(type);
+  if(index != -1) filters.splice(index, 1);
+  else filters.push(type);
+
+  io.sockets.emit('phidget', { status : 'activate', filters : filters });
 });
 
 phidget.events.on('capture', function(type){
@@ -61,4 +74,11 @@ phidget.events.on('capture', function(type){
     io.sockets.emit('phidget', { status : 'capture' });
     inActiveMode = true;
   }
+});
+
+
+
+// routes
+app.get('/', function(req, res){
+  res.render('index');
 });
