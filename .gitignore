@@ -4,3 +4,4 @@ tmp/*
 !tmp/.gitkeep
 public/vendor/*
 !public/vendor/.gitkeep
+env-vars.js
