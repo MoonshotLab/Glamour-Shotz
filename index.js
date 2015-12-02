@@ -6,6 +6,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var camera = require('./lib/camera');
 var phidget = require('./lib/phidget');
+var inActiveMode = false;
 
 
 
@@ -20,7 +21,7 @@ server.listen(process.env.PORT || '3000');
 camera.connect();
 
 camera.events.on('connected', function(){
-  io.sockets.emit('camera', { status : 'connected'});
+  io.sockets.emit('camera', { status : 'ready'});
 });
 
 camera.events.on('recording', function(){
@@ -31,7 +32,8 @@ camera.events.on('done-recording', function(){
   var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
   fs.mkdirSync(outputDir);
   camera.writeLastVideoToDisk(outputDir, function(filePath){
-
+    inActiveMode = false;
+    io.sockets.emit('camera', { status : 'ready' });
   });
 
   io.sockets.emit('camera', { status : 'done-recording' });
@@ -49,14 +51,14 @@ io.on('connection', function(socket) {
 
 
 
-
 // phidget button events
-var desiredOutput;
-var isCapturing = false;
+phidget.events.on('activate', function(type){
+  io.sockets.emit('phidget', { status : 'activate', type : type });
+});
+
 phidget.events.on('capture', function(type){
   if(!isCapturing){
-    io.emit('button-pressed', { type : type });
-    isCapturing = true;
-    desiredOutput = type;
+    io.sockets.emit('phidget', { status : 'capture' });
+    inActiveMode = true;
   }
 });
