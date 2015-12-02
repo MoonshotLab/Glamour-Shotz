@@ -6,6 +6,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var camera = require('./lib/camera');
 var phidget = require('./lib/phidget');
+var video = require('./lib/video');
 
 // handle app state
 var filters       = [];
@@ -32,15 +33,20 @@ camera.events.on('recording', function(){
 });
 
 camera.events.on('done-recording', function(){
+  // create an output directory
   var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
   fs.mkdirSync(outputDir);
 
   // necessary to give the camera enough time to "stop recording"
   setTimeout(function(){
     camera.writeLastVideoToDisk(outputDir, function(filePath){
+      video.optimize(outputDir, filters);
+      io.sockets.emit('camera', { status : 'ready' });
+
+      // reset the active mode and filters to allow continual use while
+      // the video optimization processes in the background
       inActiveMode  = false;
       filters       = [];
-      io.sockets.emit('camera', { status : 'ready' });
     });
   }, 2500);
 
@@ -55,6 +61,26 @@ io.on('connection', function(socket) {
   socket.on('countdown-done', function(){
     camera.takeVideo();
   });
+});
+
+
+
+// publish video processing steps to the interface
+video.events.on('step', function(data){
+  data.status = 'processing';
+  io.sockets.emit('video', data);
+});
+
+video.events.on('publish', function(data){
+  data.status   = 'publish';
+  data.location = path.normalize(data.directory.replace(process.cwd(), ''));
+  io.sockets.emit('video', data);
+});
+
+video.events.on('done', function(data){
+  data.status   = 'done';
+  data.location = path.normalize(data.directory.replace(process.cwd(), ''));
+  io.sockets.emit('video', data);
 });
 
 
