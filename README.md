@@ -1,5 +1,5 @@
 # Glamour ShotZ
-An physical, interactive, multi filter video photo booth.
+A physical, interactive, multi filter video photo booth.
 
 Participants enter a physical photo booth with props and a live preview. Before recording starts, they're prompted to apply filters to their future video via physical push buttons. Once the participant(s) decide on a filter, they pull a lever to begin recording.
 
