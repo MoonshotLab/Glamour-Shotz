@@ -37,6 +37,8 @@ camera.events.on('done-recording', function(){
   // create an output directory
   var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
   fs.mkdirSync(outputDir);
+  // create the frames directory
+  fs.mkdirSync(path.join(outputDir, 'frames'));
 
   // necessary to give the camera enough time to "stop recording"
   setTimeout(function(){
