@@ -1,5 +1,9 @@
 # Glamour ShotZ
-An interactive, multi option video photo booth
+An physical, interactive, multi filter video photo booth.
+
+Participants enter a physical photo booth with props and a live preview. Before recording starts, they're prompted to apply filters to their future video via physical push buttons. Once the participant(s) decide on a filter, they pull a lever to begin recording.
+
+After 15 seconds of capture, participants leave the booth and watch their filtered video on a separate screen. The video is automatically uploaded to a Facebook event where they can publicly share their experience.
 
 
 
@@ -7,6 +11,15 @@ An interactive, multi option video photo booth
 Necessary hardware for this project includes 2 computers, a [phidget](www.phidgets.com), some physical SPST buttons, wire, and a Sony DSLR.
 
 One computer is used as the application server and preforms the video processing work (the development computer). The other computer acts as a wifi consumer and makes it's own internet connection available to the development computer via a crossover cable. This is necessary because the DSLR provides it's API via rest routing which is only available when joining it's wifi network.
+
+## Environment variables
+Videos and posters are automatically uploaded to Amazon S3 and published on Facebook. The following environment variables are required:
+
+* S3_KEY
+* S3_SECRET
+* S3_BUCKET
+* FB_CLIENT_ID
+* FB_SECRET
 
 ### Camera
 1. Follow the [instructions](https://www.playmemoriescameraapps.com/portal/) provided by sony to register your camera device. This will allow you to install new apps on the camera.
