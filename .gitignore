@@ -5,3 +5,4 @@ tmp/*
 public/vendor/*
 !public/vendor/.gitkeep
 env-vars.js
+local.db

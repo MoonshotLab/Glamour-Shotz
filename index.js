@@ -8,6 +8,8 @@ var camera = require('./lib/camera');
 var phidget = require('./lib/phidget');
 var video = require('./lib/video');
 var s3 = require('./lib/s3');
+var db = require('dirty')('local.db');
+var utils = require('./lib/utils');
 
 // handle app state
 var filters       = [];
@@ -17,6 +19,7 @@ var inActiveMode  = false;
 
 // config express
 app.use(express.static('public'));
+app.use(express.static('tmp'));
 app.set('view engine', 'jade');
 server.listen(process.env.PORT || '3000');
 
@@ -75,14 +78,19 @@ video.events.on('step', function(data){
 });
 
 video.events.on('publish', function(data){
-  data.status   = 'publish';
-  data.location = path.normalize(data.directory.replace(process.cwd(), ''));
+  var abbreviatedDir  = path.normalize(data.directory.replace(process.cwd(), ''));
+  data.status         = 'publish';
+  data.location       = abbreviatedDir;
+
   io.sockets.emit('video', data);
+  db.set(abbreviatedDir, data.file);
 });
 
 video.events.on('done', function(data){
-  data.status   = 'done';
-  data.location = path.normalize(data.directory.replace(process.cwd(), ''));
+  var abbreviatedDir  = path.normalize(data.directory.replace(process.cwd(), ''));
+  data.status         = 'done';
+  data.location       = abbreviatedDir;
+
   io.sockets.emit('video', data);
 
   s3.remember([
@@ -117,4 +125,19 @@ phidget.events.on('capture', function(type){
 // routes
 app.get('/', function(req, res){
   res.render('index');
+});
+
+app.get('/showcase', function(req, res){
+  res.render('showcase');
+});
+
+app.get('/videos', function(req, res){
+  var vids = [];
+  db.forEach(function(key, val){
+    vids.push(path.join('/', key, val));
+  });
+
+  if(req.query.shuffle) utils.shuffle(vids);
+
+  res.send(vids);
 });
