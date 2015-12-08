@@ -26,6 +26,7 @@ server.listen(process.env.PORT || '3000');
 
 
 // connect camera and listen for events
+camera.setSocket(io);
 camera.connect();
 
 camera.events.on('connected', function(){

@@ -2,6 +2,7 @@
 node_modules
 tmp/*
 !tmp/.gitkeep
+public/live-feed.jpg
 public/vendor/*
 !public/vendor/.gitkeep
 env-vars.js

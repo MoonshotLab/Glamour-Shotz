@@ -1,6 +1,4 @@
 socket.on('camera', function(data){
-  console.log('camera', data);
-
   switch(data.status){
     case 'connected':
       break;
@@ -10,6 +8,11 @@ socket.on('camera', function(data){
     case 'done-recording':
       $('body').removeClass('recording');
       $('li').removeClass('highlight');
+      break;
+    case 'live-feed-update':
+      var query = new Date().getTime();
+      var path = '/live-feed.jpg?bust=' + query;
+      $('.live-feed').attr('src', path);
       break;
   }
 });
