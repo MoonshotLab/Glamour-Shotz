@@ -1,29 +1,19 @@
-html{
-  height: 100%;
-}
-body{
-  height: 100%;
-  background-color: black;
-  color: white;
-}
-
-
 .options{
   width: 100%;
   position: absolute;
-  bottom: 10%;
+  bottom: 2%;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 .options li{
-  width: 22%;
+  width: 30%;
   float: left;
-  padding-bottom: 22%;
+  padding-bottom: 30%;
   position: relative;
   overflow: hidden;
   display: block;
-  margin-left: 2.5%;
+  margin-left: 2.25%;
   background-image: url('/dance-party.jpg');
 }
 .options .content{
