@@ -31,6 +31,7 @@ camera.connect();
 
 camera.events.on('connected', function(){
   io.sockets.emit('camera', { status : 'ready'});
+  camera.startLiveView();
 });
 
 camera.events.on('recording', function(){
@@ -48,6 +49,7 @@ camera.events.on('done-recording', function(){
   setTimeout(function(){
     camera.writeLastVideoToDisk(outputDir, function(filePath){
       video.optimize(outputDir, filters);
+      camera.startLiveView();
       io.sockets.emit('camera', { status : 'ready' });
 
       // reset the active mode and filters to allow continual use while
@@ -115,7 +117,7 @@ phidget.events.on('activate', function(type){
 });
 
 phidget.events.on('capture', function(type){
-  if(!isCapturing){
+  if(!inActiveMode){
     io.sockets.emit('phidget', { status : 'capture' });
     inActiveMode = true;
   }
