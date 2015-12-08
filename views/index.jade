@@ -2,24 +2,35 @@ extends layout
 
 block head
   link(rel='stylesheet' href='index.css')
-  script(src='index.js')
 
 block content
-  img.live-feed(src='/live-feed.jpg')
+  .state.ready
+    img.live-feed(src='/live-feed.jpg')
 
-  ul.options
-    li.gif
-      .content
-        .table
-          .table-cell
-            h2 Gif
-    li.slowmo
-      .content
-        .table
-          .table-cell
-            h2 SlowMo
-    li.reverse
-      .content
-        .table
-          .table-cell
-            h2 Reverse-O
+    ul.options
+      li.gif.option
+        .content
+          .table
+            .table-cell
+              h2 Gif
+      li.slowmo
+        .content
+          .table
+            .table-cell
+              h2 SlowMo
+      li.reverse
+        .content
+          .table
+            .table-cell
+              h2 Reverse-O
+
+  .state.countdown
+    h1 3
+    
+  .state.recording
+    h1 Recording
+  
+  .state.recording
+    h1 Processing, please wait very very patiently
+
+  script(src='index.js')

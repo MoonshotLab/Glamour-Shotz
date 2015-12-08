@@ -1,13 +1,13 @@
+// listen to the camera
 socket.on('camera', function(data){
   switch(data.status){
     case 'connected':
       break;
     case 'recording':
-      $('body').addClass('recording');
+      changeState(data.status);
       break;
     case 'done-recording':
-      $('body').removeClass('recording');
-      $('li').removeClass('highlight');
+      changeState('processing');
       break;
     case 'live-feed-update':
       var query = new Date().getTime();
@@ -18,17 +18,31 @@ socket.on('camera', function(data){
 });
 
 
+// listen for button presses
 socket.on('phidget', function(data){
   if(data.status == 'capture'){
-    setTimeout(function(){
-      // TODO: make some kind of countdown
-      socket.emit('countdown-done');
-    }, 1000);
+    changeState('countdown');
+
+    // countdown
+    setTimeout(function(){ $('.countdown h1').text('2');  }, 1000);
+    setTimeout(function(){ $('.countdown h1').text('1');  }, 2000);
+    setTimeout(function(){ socket.emit('countdown-done'); }, 3000);
+    // reset the countdown ui
+    setTimeout(function(){ $('.countdown h1').text('3');  }, 4000);
+
   } else if(data.status == 'activate'){
-    $('li').removeClass('highlight');
+    // toggle the options
+    $('li.option').removeClass('highlight');
     data.filters.forEach(function(filter){
-      var selector = 'li.' + filter;
+      var selector = 'li.option.' + filter;
       $(selector).addClass('highlight');
     });
   }
 });
+
+
+
+var changeState = function(state){
+  $('.state').hide();
+  var selector = '.state.' + state;
+};

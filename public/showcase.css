@@ -9,3 +9,14 @@ canvas{
   width: 100% !important;
   height: 100% !important;
 }
+.status{
+  position: absolute;
+  background-color: black;
+  bottom: 0;
+  height: 20px;
+  color: white;
+  padding: 5px;
+  width: 100%;
+  font-size: 70%;
+  background-color: rgba(0,0,0,.5);
+}

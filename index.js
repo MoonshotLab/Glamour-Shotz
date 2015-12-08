@@ -42,13 +42,17 @@ camera.events.on('done-recording', function(){
   // create an output directory
   var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
   fs.mkdirSync(outputDir);
-  // create the frames directory
-  fs.mkdirSync(path.join(outputDir, 'frames'));
 
-  // necessary to give the camera enough time to "stop recording"
+  // tell the client we're done recording
+  io.sockets.emit('camera', { status : 'done-recording' });
+
+  // timeout is necessary to give the camera enough time to "stop recording"
   setTimeout(function(){
     camera.writeLastVideoToDisk(outputDir, function(filePath){
+      // optimize videos in background
       video.optimize(outputDir, filters);
+
+      // restart the live view and tell the client
       camera.startLiveView();
       io.sockets.emit('camera', { status : 'ready' });
 
@@ -58,8 +62,6 @@ camera.events.on('done-recording', function(){
       filters       = [];
     });
   }, 2500);
-
-  io.sockets.emit('camera', { status : 'done-recording' });
 });
 
 
@@ -67,9 +69,7 @@ camera.events.on('done-recording', function(){
 // events from interface
 io.on('connection', function(socket) {
   // listen for countdown completion from the client before recording start
-  socket.on('countdown-done', function(){
-    camera.takeVideo();
-  });
+  socket.on('countdown-done', camera.takeVideo);
 });
 
 

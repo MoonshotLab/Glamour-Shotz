@@ -59,5 +59,7 @@ socket.on('video', function(data){
     var mediaLocation = data.location + '/' + data.file;
     if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
     else playVideo(mediaLocation);
+  } else if(data.status == 'step'){
+    $('.status').text(data.humanTitle);
   }
 });
