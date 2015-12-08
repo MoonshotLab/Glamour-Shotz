@@ -19,15 +19,16 @@ socket.on('camera', function(data){
 
 
 socket.on('phidget', function(data){
-  console.log('phidget', data);
-
   if(data.status == 'capture'){
     setTimeout(function(){
       // TODO: make some kind of countdown
       socket.emit('countdown-done');
     }, 1000);
   } else if(data.status == 'activate'){
-    var selector = 'li.' + data.type;
-    $(selector).toggleClass('highlight');
+    $('li').removeClass('highlight');
+    data.filters.forEach(function(filter){
+      var selector = 'li.' + filter;
+      $(selector).addClass('highlight');
+    });
   }
 });
