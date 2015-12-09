@@ -63,3 +63,8 @@ socket.on('video', function(data){
     $('.status').text(data.humanTitle);
   }
 });
+
+
+socket.on('camera', function(data){
+  $('.status').text(data.humanTitle);
+});

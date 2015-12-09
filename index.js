@@ -30,12 +30,16 @@ camera.setSocket(io);
 camera.connect();
 
 camera.events.on('connected', function(){
-  io.sockets.emit('camera', { status : 'ready'});
+  io.sockets.emit('camera', {
+    status : 'ready', humanTitle : 'Camera Ready'
+  });
   camera.startLiveView();
 });
 
 camera.events.on('recording', function(){
-  io.sockets.emit('camera', { status : 'recording'});
+  io.sockets.emit('camera', {
+    status : 'recording', humanTitle : 'Camera Recording'
+  });
 });
 
 camera.events.on('done-recording', function(){
@@ -44,7 +48,9 @@ camera.events.on('done-recording', function(){
   fs.mkdirSync(outputDir);
 
   // tell the client we're done recording
-  io.sockets.emit('camera', { status : 'done-recording' });
+  io.sockets.emit('camera', {
+    status : 'done-recording', humanTitle : 'Camera Done Recording'
+  });
 
   // timeout is necessary to give the camera enough time to "stop recording"
   setTimeout(function(){
@@ -54,7 +60,9 @@ camera.events.on('done-recording', function(){
 
       // restart the live view and tell the client
       camera.startLiveView();
-      io.sockets.emit('camera', { status : 'ready' });
+      io.sockets.emit('camera', {
+        status : 'ready', humanTItle : 'Camera Ready'
+      });
 
       // reset the active mode and filters to allow continual use while
       // the video optimization processes in the background
@@ -94,12 +102,16 @@ video.events.on('done', function(data){
   data.status         = 'done';
   data.location       = abbreviatedDir;
 
+  data.humanTitle = 'Uploading to Amazon S3';
   io.sockets.emit('video', data);
 
   s3.remember([
     path.join(data.directory, 'poster.jpg'),
     path.join(data.directory, data.file)
   ]).then(function(remotePaths){
+    io.sockets.emit('video', {
+      data : { humanTitle : 'Uploading to Facebook' }
+    });
     console.log(remotePaths);
   });
 });

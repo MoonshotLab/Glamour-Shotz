@@ -1,3 +1,11 @@
+.state{
+  display: none;
+}
+.state.ready{
+  display: block;
+}
+
+
 h1{
   text-align: center;
   font-size: 500%;
