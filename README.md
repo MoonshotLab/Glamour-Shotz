@@ -28,7 +28,10 @@ Videos and posters are automatically uploaded to Amazon S3 and published on Face
 ### Camera
 1. Follow the [instructions](https://www.playmemoriescameraapps.com/portal/) provided by sony to register your camera device. This will allow you to install new apps on the camera.
 2. The installed *Smart Remote Control* provides an insufficient API for this project. You must install the updated remote control app located [here](https://www.playmemoriescameraapps.com/portal/usbdetail.php?eid=IS9104-NPIA09014_00-F00002).
-3. Launch the new *Smart Remote Control* app from the camera.
+3. For best results, tune the camera to the following settings: 120 fps. 240 shutter speed, auto video mode, variable iso.
+4. Launch the new *Smart Remote Control* app from the camera.
+
+
 
 ### Computer
 1. `npm install`
@@ -37,7 +40,7 @@ Videos and posters are automatically uploaded to Amazon S3 and published on Face
 4. Find the appropriate [phidget driver](http://www.phidgets.com/docs/Operating_System_Support) for your machine.
 5. [Turn on the phidget web service](http://www.phidgets.com/docs/OS_-_OS_X#WebService).
 6. Use the development computer to join to the Camera's provided wifi network.
-7. Use a cross over ethernet cable to connect your development machine, to your wifi machine.
+7. Use a cross over ethernet cable to connect your development machine, to your wifi machine. A useful guide can be found [here](http://www.mactip.net/share-internet-connection-mac/).
 8. `node .`
 
 
