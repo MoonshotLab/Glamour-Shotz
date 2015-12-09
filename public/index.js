@@ -1,6 +1,9 @@
 // listen to the camera
 socket.on('camera', function(data){
   switch(data.status){
+    case 'ready':
+      changeState(data.status);
+      break;
     case 'connected':
       break;
     case 'recording':
@@ -44,5 +47,7 @@ socket.on('phidget', function(data){
 
 var changeState = function(state){
   $('.state').hide();
+  $('li.option').removeClass('highlight');
   var selector = '.state.' + state;
+  $(selector).show();
 };

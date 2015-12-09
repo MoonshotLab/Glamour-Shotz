@@ -30,6 +30,7 @@ camera.setSocket(io);
 camera.connect();
 
 camera.events.on('connected', function(){
+  console.log('camera connected');
   io.sockets.emit('camera', {
     status : 'ready', humanTitle : 'Camera Ready'
   });
@@ -47,22 +48,23 @@ camera.events.on('done-recording', function(){
   var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
   fs.mkdirSync(outputDir);
 
-  // tell the client we're done recording
-  io.sockets.emit('camera', {
-    status : 'done-recording', humanTitle : 'Camera Done Recording'
-  });
-
   // timeout is necessary to give the camera enough time to "stop recording"
   setTimeout(function(){
-    camera.writeLastVideoToDisk(outputDir, function(filePath){
-      // optimize videos in background
-      video.optimize(outputDir, filters);
 
+    // tell the client we're done recording
+    io.sockets.emit('camera', {
+      status : 'done-recording', humanTitle : 'Camera Done Recording'
+    });
+
+    camera.writeLastVideoToDisk(outputDir, function(filePath){
       // restart the live view and tell the client
       camera.startLiveView();
       io.sockets.emit('camera', {
-        status : 'ready', humanTItle : 'Camera Ready'
+        status : 'ready', humanTitle : 'Camera Ready'
       });
+
+      // optimize videos in background
+      video.optimize(outputDir, filters);
 
       // reset the active mode and filters to allow continual use while
       // the video optimization processes in the background
@@ -89,10 +91,16 @@ video.events.on('step', function(data){
 });
 
 video.events.on('publish', function(data){
-  var abbreviatedDir  = path.normalize(data.directory.replace(process.cwd(), ''));
+  // get a clean path for the client and dirty db store
+  var abbreviatedDir  = path.normalize(
+    path.normalize(
+      data.directory.replace(process.cwd(), '')
+    ).replace('tmp', '')
+  );
   data.status         = 'publish';
   data.location       = abbreviatedDir;
 
+  // tell client and store
   io.sockets.emit('video', data);
   db.set(abbreviatedDir, data.file);
 });
@@ -110,9 +118,8 @@ video.events.on('done', function(data){
     path.join(data.directory, data.file)
   ]).then(function(remotePaths){
     io.sockets.emit('video', {
-      data : { humanTitle : 'Uploading to Facebook' }
+      humanTitle : 'Uploading to Facebook'
     });
-    console.log(remotePaths);
   });
 });
 

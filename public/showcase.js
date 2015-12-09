@@ -56,15 +56,20 @@ var playRandomMedia = function(){
 
 socket.on('video', function(data){
   if(data.status == 'publish'){
+    emptyStage();
     var mediaLocation = data.location + '/' + data.file;
     if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
     else playVideo(mediaLocation);
-  } else if(data.status == 'step'){
-    $('.status').text(data.humanTitle);
   }
+
+  $('.status').text(data.humanTitle);
 });
 
 
 socket.on('camera', function(data){
-  $('.status').text(data.humanTitle);
+  if(data.status != 'live-feed-update')
+    $('.status').text(data.humanTitle);
 });
+
+
+$(function(){ playRandomMedia(); });
