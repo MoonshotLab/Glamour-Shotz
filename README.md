@@ -12,9 +12,18 @@ Necessary hardware for this project includes 2 computers, a [phidget](www.phidge
 
 One computer is used as the application server and preforms the video processing work (the development computer). The other computer acts as a wifi consumer and makes it's own internet connection available to the development computer via a crossover cable. This is necessary because the DSLR provides it's API via rest routing which is only available when joining it's wifi network.
 
+### Facebook
+This app will automatically post to a Facebook event page. To do so, you'll need to gain a user access token and an event id:
+1. Set up a Facebook app
+2. Visit the graph api explorer and select your app
+3. Add the following scopes and generate an access token: user_posts user_status user_photos user_videos user_events publish_actions manage_pages
+4. Visit the access token tool
+5. Debug your user token
+6. Extend your access token
+7. Get your event id from the event's URL
+
 ### Client Side Dependencies
 The only client side dependency is [jquery](http://code.jquery.com/jquery-2.1.4.min.js). I didn't want to add an extra layer of complexity by adding a client package manager, and I didn't want to commit the lib to the repo. You'll have to manually download them and drop it in the `/public/vendor` directory.
-
 
 ### Environment variables
 Videos and posters are automatically uploaded to Amazon S3 and published on Facebook. The following environment variables are required:

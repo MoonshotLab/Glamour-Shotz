@@ -3,6 +3,7 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
+var facebook = require('./lib/facebook');
 var io = require('socket.io')(server);
 var camera = require('./lib/camera');
 var phidget = require('./lib/phidget');
@@ -117,11 +118,13 @@ video.events.on('done', function(data){
   io.sockets.emit('video', data);
 
   s3.remember([
-    path.join(data.directory, 'poster.jpg'),
     path.join(data.directory, data.file)
   ]).then(function(remotePaths){
-    io.sockets.emit('video', {
-      humanTitle : 'Uploading to Facebook'
+
+    io.sockets.emit('video', { humanTitle : 'Uploading to Facebook' });
+
+    facebook.share(remotePaths, function(){
+      io.sockets.emit('video', { humanTitle : 'Posted to Facebook!' });
     });
   });
 });
