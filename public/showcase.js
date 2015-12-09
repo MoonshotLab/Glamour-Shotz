@@ -1,7 +1,6 @@
 var emptyStage = function(){
   $('#vid').remove();
-  $('#gif').remove();
-  $('.jsgif').remove();
+  $('.gif').remove();
 };
 
 
@@ -22,30 +21,26 @@ var playVideo = function(source){
 
 var playGif = function(source){
   var template = [
-    '<img id="gif" rel:rubbable="0" rel:auto_play="0" src="',
+    '<img class="gif" rel:rubbable="0" rel:auto_play="0" src="',
     source,
     '" />'
   ].join('');
 
-  $('body').append(template);
-  var superGif = new SuperGif({
-    gif     : document.getElementById('gif'),
-    on_end  : playRandomMedia
-  });
+  for(var i=0; i<9; i++){
+    $('body').append(template);
+  }
 
-  superGif.load(function(){
-    $('.jsgif').show();
-    superGif.play();
-  });
+  setTimeout(playRandomMedia, 5000);
 };
 
 
+
 var playRandomMedia = function(){
+  emptyStage();
+
   $.ajax({
     url : '/videos?shuffle=true',
     success : function(results){
-      emptyStage();
-
       var mediaLocation = results[0];
       if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
       else playVideo(mediaLocation);

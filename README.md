@@ -13,7 +13,7 @@ Necessary hardware for this project includes 2 computers, a [phidget](www.phidge
 One computer is used as the application server and preforms the video processing work (the development computer). The other computer acts as a wifi consumer and makes it's own internet connection available to the development computer via a crossover cable. This is necessary because the DSLR provides it's API via rest routing which is only available when joining it's wifi network.
 
 ### Client Side Dependencies
-I'm using [jquery](http://code.jquery.com/jquery-2.1.4.min.js) and [libgif](https://raw.githubusercontent.com/buzzfeed/libgif-js/master/libgif.js) as client side dependencies. I didn't want to add an extra layer of complexity by adding a client package manager, and I didn't want to commit those libs to the repo. You'll have to manually download them and drop them in the `/public/vendor` directory.
+The only client side dependency is [jquery](http://code.jquery.com/jquery-2.1.4.min.js). I didn't want to add an extra layer of complexity by adding a client package manager, and I didn't want to commit the lib to the repo. You'll have to manually download them and drop it in the `/public/vendor` directory.
 
 
 ### Environment variables
