@@ -38,6 +38,7 @@ camera.events.on('connected', function(){
 });
 
 camera.events.on('recording', function(){
+  phidget.lights(true);
   io.sockets.emit('camera', {
     status : 'recording', humanTitle : 'Camera Recording'
   });
@@ -55,6 +56,8 @@ camera.events.on('done-recording', function(){
     io.sockets.emit('camera', {
       status : 'done-recording', humanTitle : 'Camera Done Recording'
     });
+
+    phidget.lights(false);
 
     camera.writeLastVideoToDisk(outputDir, function(filePath){
       // restart the live view and tell the client
