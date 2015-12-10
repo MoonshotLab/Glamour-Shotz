@@ -46,8 +46,6 @@ camera.events.on('recording', function(){
 });
 
 
-var a = '/Users/jlongstr/Projects/glamour-shots/tmp/1449684049905';
-video.optimize('1449684049905', a, ['slowmo', 'reverse']);
 
 camera.events.on('done-recording', function(){
 
