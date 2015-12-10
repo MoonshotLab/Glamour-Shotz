@@ -45,9 +45,17 @@ camera.events.on('recording', function(){
   });
 });
 
+
+var a = '/Users/jlongstr/Projects/glamour-shots/tmp/1449684049905';
+video.optimize('1449684049905', a, ['slowmo', 'reverse']);
+
 camera.events.on('done-recording', function(){
+
+  // generate an id for dir creation
+  var id = new Date().getTime().toString();
+
   // create an output directory
-  var outputDir = path.join(process.cwd(), 'tmp', new Date().getTime().toString());
+  var outputDir = path.join(process.cwd(), 'tmp', id);
   fs.mkdirSync(outputDir);
 
   // timeout is necessary to give the camera enough time to "stop recording"
@@ -58,6 +66,7 @@ camera.events.on('done-recording', function(){
       status : 'done-recording', humanTitle : 'Camera Done Recording'
     });
 
+    // toggle the lights
     phidget.lights(false);
 
     camera.writeLastVideoToDisk(outputDir, function(filePath){
@@ -68,7 +77,7 @@ camera.events.on('done-recording', function(){
       });
 
       // optimize videos in background
-      video.optimize(outputDir, filters);
+      video.optimize(id, outputDir, filters);
 
       // reset the active mode and filters to allow continual use while
       // the video optimization processes in the background
@@ -94,35 +103,39 @@ video.events.on('step', function(data){
   io.sockets.emit('video', data);
 });
 
-video.events.on('publish', function(data){
-  // get a clean path for the client and dirty db store
-  var abbreviatedDir  = path.normalize(
-    path.normalize(
-      data.directory.replace(process.cwd(), '')
-    ).replace('tmp', '')
-  );
-  data.status         = 'publish';
-  data.location       = abbreviatedDir;
 
-  // tell client and store
-  io.sockets.emit('video', data);
-  db.set(abbreviatedDir, data.file);
-});
-
+// tell client when we're done
 video.events.on('done', function(data){
-  var abbreviatedDir  = path.normalize(data.directory.replace(process.cwd(), ''));
-  data.status         = 'done';
-  data.location       = abbreviatedDir;
 
+  // what will we be showcasing?
+  var showcase;
+  if(data.outputs.gif) showcase = data.outputs.gif;
+  else showcase = data.outputs.final;
+
+  // dirty db store
+  db.set(data.id, showcase.fileName);
+
+  // modify
+  data.status     = 'done';
+  data.location   = showcase.shortPath;
   data.humanTitle = 'Uploading to Amazon S3';
+
+  // notify client
   io.sockets.emit('video', data);
 
-  s3.remember([
-    path.join(data.directory, data.file)
-  ]).then(function(remotePaths){
+  // remember some files
+  var remembers = [
+    data.outputs.final.fullPath,
+    data.outputs.poster.fullPath
+  ];
+  if(data.outputs.gif)
+    remembers.push(data.outputs.gif.fullPath);
 
+  // store in s3
+  s3.remember(remembers).then(function(remotePaths){
     io.sockets.emit('video', { humanTitle : 'Uploading to Facebook' });
 
+    // put this on facebook
     facebook.share(remotePaths, function(){
       io.sockets.emit('video', { humanTitle : 'Posted to Facebook!' });
     });

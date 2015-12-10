@@ -50,11 +50,12 @@ var playRandomMedia = function(){
 
 
 socket.on('video', function(data){
-  if(data.status == 'publish'){
+  if(data.status == 'done'){
     emptyStage();
-    var mediaLocation = data.location + '/' + data.file;
-    if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
-    else playVideo(mediaLocation);
+
+    if(data.location.indexOf('.gif') != -1)
+      playGif(data.location);
+    else playVideo(data.location);
   }
 
   $('.status').text(data.humanTitle);
