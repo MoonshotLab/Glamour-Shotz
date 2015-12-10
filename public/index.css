@@ -1,62 +1,93 @@
-.state{
+.state, .countdown-screen{
   display: none;
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: contain;
 }
 .state.ready{
   display: block;
 }
-
-
-h1{
-  text-align: center;
-  font-size: 500%;
-  margin-top: 20%;
+.state.recording{
+  background-image: url('/screens/recording.png');
+}
+.state.done{
+  background-image: url('/screens/done.png');
+}
+.state.processing{
+  background-image: url('/screens/processing.png');
+}
+.countdown-screen.one{
+  background-image: url('/screens/countdown-1.png');
+}
+.countdown-screen.two{
+  background-image: url('/screens/countdown-2.png');
+}
+.countdown-screen.three{
+  background-image: url('/screens/countdown-3.png');
+}
+.countdown-screen.go{
+  background-image: url('/screens/countdown-go.png');
 }
 
 
-.live-feed{
+
+.state.ready .live-feed{
   width: 100%;
   height: 100%;
 }
-.options{
-  width: 100%;
+.state.ready .ui-container{
   position: absolute;
-  bottom: 2%;
+  height: 30%;
+  width: 100%;
+  background-color: rgba(255,255,255,.75);
+  bottom: 0;
+  box-shadow: 0px -3px 2px rgba(0,0,0,.25);
+  -webkit-transition: all .3s;
+}
+.state.ready .ui-container.hide{
+  bottom: -30%;
+}
+.state.ready .options{
   list-style-type: none;
   margin: 0;
   padding: 0;
+  width: 50%;
+  margin: auto;
+  overflow:hidden;
 }
-.options li{
-  width: 30%;
-  float: left;
-  padding-bottom: 30%;
-  position: relative;
-  overflow: hidden;
-  display: block;
-  margin-left: 2.25%;
-}
-.options li.highlight{
-  color: red;
-}
-.options .content{
-  position: absolute;
-  width: 90%;
-  padding: 5%;
-  height: 90%;
-}
-
-
-h2{
+.state.ready .instructions{
+  color: #363636;
   text-align: center;
-  position: absolute;
-  bottom: 0;
-  width: 90%;
-  text-shadow: 1px 1px 1px black;
-  font-size: 300%;
+  margin: 40px 0;
+  font-size: 125%;
 }
-.table{
-  display: table;
-  width: 100%;
+
+
+.state.ready li{
+  width: 33.3%;
+  float: left;
+  display: block;
+  font-size: 125%;
 }
-.table-cell{
-  display: table-cell;
+.state.ready .filter, .state.ready .line{
+  -webkit-transition: all .3s;
+}
+.state.ready .line{
+  background-color: #363636;
+  height: 300px;
+  width: 4px;
+  margin-left: 50%;
+}
+.state.ready .filter{
+  background-color:#363636;
+  border-radius: 40px;
+  text-align: center;
+  padding: 20px 0px;
+  width: 80%;
+  margin: auto;
+  text-transform: uppercase;
+}
+.state.ready li.highlight .filter, .state.ready li.highlight .line{
+  background-color: #ff0000;
 }

@@ -6,31 +6,32 @@ block head
 block content
   .state.ready
     img.live-feed(src='/live-feed.jpg')
+    
+    .ui-container
+      .instructions Select as many filters as you like below. Pull the lever to begin recording.
+      ul.options
+        li.gif.option
+          .filter Gif
+          .line
+        li.slowmo.option
+          .filter Slo-Mo
+          .line
+        li.reverse.option
+          .filter Reverse
+          .line
 
-    ul.options
-      li.gif.option
-        .content
-          .table
-            .table-cell
-              h2 Gif
-      li.slowmo.option
-        .content
-          .table
-            .table-cell
-              h2 SlowMo
-      li.reverse.option
-        .content
-          .table
-            .table-cell
-              h2 Reverse-O
 
   .state.countdown
-    h1 3
+    .countdown-screen.go
+    .countdown-screen.one
+    .countdown-screen.two
+    .countdown-screen.three
+    
     
   .state.recording
-    h1 Recording
+  
+  .state.done
   
   .state.processing
-    h1 Processing, please wait very very patiently
 
   script(src='index.js')

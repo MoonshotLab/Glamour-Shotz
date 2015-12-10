@@ -1,3 +1,6 @@
+var uiState = 'ready';
+
+
 // listen to the camera
 socket.on('camera', function(data){
   switch(data.status){
@@ -10,7 +13,11 @@ socket.on('camera', function(data){
       changeState(data.status);
       break;
     case 'done-recording':
-      changeState('processing');
+      changeState('done');
+      setTimeout(function(){
+        if(uiState == 'done')
+          changeState('processing');
+      }, 4000);
       break;
     case 'live-feed-update':
       var query = new Date().getTime();
@@ -24,15 +31,8 @@ socket.on('camera', function(data){
 // listen for button presses
 socket.on('phidget', function(data){
   if(data.status == 'capture'){
-    changeState('countdown');
-
-    // countdown
-    setTimeout(function(){ $('.countdown h1').text('2');  }, 1000);
-    setTimeout(function(){ $('.countdown h1').text('1');  }, 2000);
-    setTimeout(function(){ socket.emit('countdown-done'); }, 3000);
-    // reset the countdown ui
-    setTimeout(function(){ $('.countdown h1').text('3');  }, 4000);
-
+    $('.ui-container').addClass('hide');
+    setTimeout(startCountdown, 700);
   } else if(data.status == 'activate'){
     // toggle the options
     $('li.option').removeClass('highlight');
@@ -45,7 +45,35 @@ socket.on('phidget', function(data){
 
 
 
+var startCountdown = function(){
+  changeState('countdown');
+  $('.ui-container').addClass('hide');
+
+  $('.countdown-screen.three').show();
+  // countdown
+  setTimeout(function(){
+    $('.countdown-screen.two').show();
+  }, 1000);
+  setTimeout(function(){
+    $('.countdown-screen.one').show();
+  }, 2000);
+  setTimeout(function(){
+    $('.countdown-screen.go').show();
+  }, 3000);
+  setTimeout(function(){
+    socket.emit('countdown-done');
+  }, 4000);
+  // reset the countdown ui
+  setTimeout(function(){
+    $('.countdown-screen').hide();
+  }, 5000);
+};
+
+
+
 var changeState = function(state){
+  uiState = state;
+
   $('.state').hide();
   $('li.option').removeClass('highlight');
   var selector = '.state.' + state;
