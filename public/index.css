@@ -1,3 +1,7 @@
+body{
+  font-family: 'GT Walsheim';
+}
+
 .state, .countdown-screen{
   display: none;
   width: 100%;
@@ -26,8 +30,8 @@
 .countdown-screen.three{
   background-image: url('/screens/countdown-3.png');
 }
-.countdown-screen.go{
-  background-image: url('/screens/countdown-go.png');
+.countdown-screen.prep{
+  background-image: url('/screens/prep.png');
 }
 
 
@@ -52,7 +56,7 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 50%;
+  width: 75%;
   margin: auto;
   overflow:hidden;
 }
@@ -60,7 +64,8 @@
   color: #363636;
   text-align: center;
   margin: 40px 0;
-  font-size: 125%;
+  font-size: 140%;
+  font-weight: 500;
 }
 
 
@@ -84,7 +89,8 @@
   border-radius: 40px;
   text-align: center;
   padding: 20px 0px;
-  width: 80%;
+  width: 65%;
+  font-weight: 100;
   margin: auto;
   text-transform: uppercase;
 }
