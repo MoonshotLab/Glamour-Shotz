@@ -6,7 +6,7 @@ var emptyStage = function(){
 
 var playVideo = function(source){
   var template = [
-    '<video id="vid">',
+    '<video loop id="vid">',
       '<source src="',
       source,
       '">',
@@ -15,7 +15,6 @@ var playVideo = function(source){
 
   $('body').append(template);
   $('#vid')[0].play();
-  $('#vid')[0].onended = playRandomMedia;
 };
 
 
@@ -29,8 +28,6 @@ var playGif = function(source){
   for(var i=0; i<9; i++){
     $('body').append(template);
   }
-
-  setTimeout(playRandomMedia, 5000);
 };
 
 
@@ -44,15 +41,22 @@ var playRandomMedia = function(){
       var mediaLocation = results[0];
       if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
       else playVideo(mediaLocation);
+
+      clearTimeout(moveOnTimeout);
+      moveOnTimeout = setTimeout(playRandomMedia, 5000);
     }
   });
 };
 
 
+var moveOnTimeout;
 socket.on('video', function(data){
   if(data.status == 'done'){
-    emptyStage();
 
+    clearTimeout(moveOnTimeout);
+    moveOnTimeout = setTimeout(playRandomMedia, 60000);
+
+    emptyStage();
     if(data.location.indexOf('.gif') != -1)
       playGif(data.location);
     else playVideo(data.location);
