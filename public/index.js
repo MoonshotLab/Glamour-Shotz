@@ -32,7 +32,7 @@ socket.on('camera', function(data){
 socket.on('phidget', function(data){
   if(data.status == 'capture'){
     $('.ui-container').addClass('hide');
-    setTimeout(startCountdown, 700);
+    setTimeout(startCountdown, 2000);
   } else if(data.status == 'activate'){
     // toggle the options
     $('li.option').removeClass('highlight');
@@ -47,26 +47,27 @@ socket.on('phidget', function(data){
 
 var startCountdown = function(){
   changeState('countdown');
-  $('.ui-container').addClass('hide');
+  $('.ui-container').removeClass('hide');
 
-  $('.countdown-screen.three').show();
+  $('.countdown-screen.prep').show();
+
   // countdown
   setTimeout(function(){
+    $('.countdown-screen.three').show();
+  }, 1500);
+  setTimeout(function(){
     $('.countdown-screen.two').show();
-  }, 1000);
+  }, 2500);
   setTimeout(function(){
     $('.countdown-screen.one').show();
-  }, 2000);
-  setTimeout(function(){
-    $('.countdown-screen.go').show();
-  }, 3000);
+  }, 3500);
   setTimeout(function(){
     socket.emit('countdown-done');
-  }, 4000);
+  }, 4500);
   // reset the countdown ui
   setTimeout(function(){
     $('.countdown-screen').hide();
-  }, 5000);
+  }, 10000);
 };
 
 

@@ -39,7 +39,6 @@ camera.events.on('connected', function(){
 });
 
 camera.events.on('recording', function(){
-  phidget.lights(true);
   io.sockets.emit('camera', {
     status : 'recording', humanTitle : 'Camera Recording'
   });
@@ -90,7 +89,12 @@ camera.events.on('done-recording', function(){
 // events from interface
 io.on('connection', function(socket) {
   // listen for countdown completion from the client before recording start
-  socket.on('countdown-done', camera.takeVideo);
+  socket.on('countdown-done', function(){
+    phidget.lights(true);
+    setTimeout(function(){
+      camera.takeVideo();
+    }, 500);
+  });
 });
 
 
@@ -116,7 +120,7 @@ video.events.on('done', function(data){
   // modify
   data.status     = 'done';
   data.location   = showcase.shortPath;
-  data.humanTitle = 'Uploading to Amazon S3';
+  data.humanTitle = 'Uploaded to Facebook';
 
   // notify client
   io.sockets.emit('video', data);
@@ -135,7 +139,7 @@ video.events.on('done', function(data){
 
     // put this on facebook
     facebook.share(remotePaths, function(){
-      io.sockets.emit('video', { humanTitle : 'Posted to Facebook!' });
+      io.sockets.emit('video', { humanTitle : 'Done!' });
     });
   });
 });
@@ -145,11 +149,13 @@ video.events.on('done', function(data){
 // phidget button events
 phidget.events.on('activate', function(type){
   // add or delete filters
-  var index = filters.indexOf(type);
-  if(index != -1) filters.splice(index, 1);
-  else filters.push(type);
+  if(!inActiveMode){
+    var index = filters.indexOf(type);
+    if(index != -1) filters.splice(index, 1);
+    else filters.push(type);
 
-  io.sockets.emit('phidget', { status : 'activate', filters : filters });
+    io.sockets.emit('phidget', { status : 'activate', filters : filters });
+  }
 });
 
 phidget.events.on('capture', function(type){
