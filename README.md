@@ -3,14 +3,22 @@ A physical, interactive, multi filter video photo booth.
 
 Participants enter a physical photo booth with props and a live preview. Before recording starts, they're prompted to apply filters to their future video via physical push buttons. Once the participant(s) decide on a filter, they pull a lever to begin recording.
 
+![Photo Booth!](https://github.com/MoonshotLab/Glamour-Shotz/blob/master/public/documentation.jpg?raw=true)
+
 After 15 seconds of capture, participants leave the booth and watch their filtered video on a separate screen. The video is automatically uploaded to a Facebook event where they can publicly share their experience.
 
+You can view the output of the booth's first usage at a party [here](https://www.youtube.com/watch?v=QtiYtNgy874&list=PLOHQarD_3VlHDLZBgypxjeUhYAf2WGAVi).
+
+![Drinking](http://s3.amazonaws.com/glamour-shotz/1449787703503.gif)
 
 
 ## Setting up
 Necessary hardware for this project includes 2 computers, a [phidget](www.phidgets.com), some physical SPST buttons, wire, and a Sony DSLR.
 
 One computer is used as the application server and preforms the video processing work (the development computer). The other computer acts as a wifi consumer and makes it's own internet connection available to the development computer via a crossover cable. This is necessary because the DSLR provides it's API via rest routing which is only available when joining it's wifi network.
+
+[![In the mouth](http://img.youtube.com/vi/HdupX33crIY/0.jpg)](http://www.youtube.com/watch?v=HdupX33crIY)
+
 
 ### Facebook
 This app will automatically post to a Facebook event page. To do so, you'll need to gain a user access token and an event id:
@@ -24,6 +32,8 @@ This app will automatically post to a Facebook event page. To do so, you'll need
 
 ### Client Side Dependencies
 The only client side dependency is [jquery](http://code.jquery.com/jquery-2.1.4.min.js). I didn't want to add an extra layer of complexity by adding a client package manager, and I didn't want to commit the lib to the repo. You'll have to manually download them and drop it in the `/public/vendor` directory.
+
+[![Licking Faces](http://img.youtube.com/vi/ryC9pBLhD4k/0.jpg)](http://www.youtube.com/watch?v=ryC9pBLhD4k)
 
 ### Environment variables
 Videos and posters are automatically uploaded to Amazon S3 and published on Facebook. The following environment variables are required:
