@@ -3,7 +3,7 @@ A physical, interactive, multi filter video photo booth.
 
 Participants enter a physical photo booth with props and a live preview. Before recording starts, they're prompted to apply filters to their future video via physical push buttons. Once the participant(s) decide on a filter, they pull a lever to begin recording.
 
-![Photo Booth!](https://github.com/MoonshotLab/Glamour-Shotz/blob/master/public/documentation.jpg?raw=true)
+![Photo Booth!](https://raw.githubusercontent.com/MoonshotLab/Glamour-Shotz/master/public/documentation/front.jpg)
 
 After 15 seconds of capture, participants leave the booth and watch their filtered video on a separate screen. The video is automatically uploaded to a Facebook event where they can publicly share their experience.
 
