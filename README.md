@@ -1,9 +1,7 @@
 # Glamour ShotZ
 A physical, interactive, multi filter video photo booth.
 
-[![Photo Booth!](https://www.dropbox.com/s/3yhcydq6vd00mks/holiday-party.mp4?dl=0)
-
-[![![Photo Booth!](https://raw.githubusercontent.com/MoonshotLab/Glamour-Shotz/master/public/documentation/video-preview.png)](https://www.dropbox.com/s/3yhcydq6vd00mks/holiday-party.mp4?dl=0)
+[![Photo Booth!](https://raw.githubusercontent.com/MoonshotLab/Glamour-Shotz/master/public/documentation/video-preview.png)](https://www.dropbox.com/s/3yhcydq6vd00mks/holiday-party.mp4?dl=0)
 
 Participants enter a physical photo booth with props and a live preview. Before recording starts, they're prompted to apply filters to their future video via physical push buttons. Once the participant(s) decide on a filter, they pull a lever to begin recording.
 
