@@ -38,9 +38,11 @@ var playRandomMedia = function(){
   $.ajax({
     url : '/videos?shuffle=true',
     success : function(results){
-      var mediaLocation = results[0];
-      if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
-      else playVideo(mediaLocation);
+      if(results.length){
+        var mediaLocation = results[0];
+        if(mediaLocation.indexOf('.gif') != -1) playGif(mediaLocation);
+        else playVideo(mediaLocation);
+      }
 
       clearTimeout(moveOnTimeout);
       moveOnTimeout = setTimeout(playRandomMedia, 5000);
